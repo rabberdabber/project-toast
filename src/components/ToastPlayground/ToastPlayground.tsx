@@ -2,38 +2,126 @@ import React from 'react';
 
 import Button from '../Button';
 
-import styles from './ToastPlayground.module.css';
+import styled from 'styled-components';
+import toastImage from '../../../assets/toast.png';
+
+
+const CustomWrapper = styled.div`
+  padding: 64px 32px;
+  max-width: 800px;
+  margin: 0 auto;
+`;
+
+const CustomHeader = styled.header`
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: 64px;
+  min-height: 300px;
+`;
+
+const CustomImage = styled.img`
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  display: block;
+  width: 250px;
+`;
+
+const CustomHeaderH1 = styled.h1`
+  position: relative;
+  font-size: 4.25rem;
+  line-height: 1.1;
+  padding-bottom: 32px;
+  color: white;
+  text-shadow:
+    0px 0px 10px hsl(250deg 40% 16% / 0.5),
+    0px 0px 20px hsl(250deg 40% 16% / 0.5),
+    0px 0px 40px hsl(250deg 40% 16% / 0.5);
+`;
+
+const ControlsWrapper = styled.div`
+  color-scheme: light;
+  outline: 2px dashed hsl(250deg 80% 80% / 0.6);
+  outline-offset: 4px;
+  border-radius: 4px;
+  background: white;
+  color: black;
+  padding: 16px;
+  margin-top: 32px;
+`;
+
+const Row = styled.div`
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  /*
+    This is the height when a row contains a text input.
+    We specify it to prevent a layout shift when dismiss-after
+    is toggled on/off.
+  */
+  min-height: 3rem;
+`;
+
+const Label = styled.label`
+  flex-basis: 160px;
+  text-align: right;
+  font-weight: 700;
+`;
+
+const InputWrapper = styled.div`
+  flex: 1;
+`;
+
+const MessageInput = styled.textarea`
+  display: block;
+  width: 100%;
+  height: 4rem;
+`;
+
+const RadioWrapper = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  flex: 1;
+`;
+
+const RadioWrapperLabel = styled.label`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100px;
+`;
+
 
 const VARIANT_OPTIONS = ['notice', 'warning', 'success', 'error'];
 
 function ToastPlayground() {
   return (
-    <div className={styles.wrapper}>
-      <header>
-        <img alt="Cute toast mascot" src="/toast.png" />
-        <h1>Toast Playground</h1>
-      </header>
+    <CustomWrapper>
+      <CustomHeader>
+        <CustomImage alt="Cute toast mascot" src={toastImage}/>
+        <CustomHeaderH1>Toast Playground</CustomHeaderH1>
+      </CustomHeader>
 
-      <div className={styles.controlsWrapper}>
-        <div className={styles.row}>
-          <label
+      <ControlsWrapper>
+        <Row>
+          <Label
             htmlFor="message"
-            className={styles.label}
             style={{ alignSelf: 'baseline' }}
           >
             Message
-          </label>
-          <div className={styles.inputWrapper}>
-            <textarea id="message" className={styles.messageInput} />
-          </div>
-        </div>
+          </Label>
+          <InputWrapper>
+            <MessageInput id="message" />
+          </InputWrapper>
+        </Row>
 
-        <div className={styles.row}>
-          <div className={styles.label}>Variant</div>
-          <div
-            className={`${styles.inputWrapper} ${styles.radioWrapper}`}
-          >
-            <label htmlFor="variant-notice">
+        <Row>
+          <Label>Variant</Label>
+          <RadioWrapper>
+            <RadioWrapperLabel htmlFor="variant-notice">
               <input
                 id="variant-notice"
                 type="radio"
@@ -41,22 +129,20 @@ function ToastPlayground() {
                 value="notice"
               />
               notice
-            </label>
+            </RadioWrapperLabel>
+          </RadioWrapper>
 
-            {/* TODO Other Variant radio buttons here */}
-          </div>
-        </div>
+          {/* TODO Other Variant radio buttons here */}
+        </Row>
 
-        <div className={styles.row}>
-          <div className={styles.label} />
-          <div
-            className={`${styles.inputWrapper} ${styles.radioWrapper}`}
-          >
+        <Row>
+          <Label />
+          <RadioWrapper>
             <Button>Pop Toast!</Button>
-          </div>
-        </div>
-      </div>
-    </div>
+          </RadioWrapper>
+        </Row>
+      </ControlsWrapper>
+    </CustomWrapper>
   );
 }
 

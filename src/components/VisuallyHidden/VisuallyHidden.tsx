@@ -1,6 +1,6 @@
 import React from 'react';
 
-import styles from './VisuallyHidden.module.css';
+import styles from './styles.d.ts';
 
 const VisuallyHidden = ({
   children,
