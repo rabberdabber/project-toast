@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import Button from '../Button';
 
@@ -95,9 +95,29 @@ const RadioWrapperLabel = styled.label`
 `;
 
 
-const VARIANT_OPTIONS = ['notice', 'warning', 'success', 'error'];
+const VARIANT_OPTIONS = ['notice', 'warning', 'success', 'error'] as const;
 
-function ToastPlayground() {
+type ToastVariant = typeof VARIANT_OPTIONS[number];
+function ToastPlayground(): React.ReactElement {
+  const [message, setMessage] = React.useState('');
+  const [variant, setVariant] = React.useState<ToastVariant>(VARIANT_OPTIONS[0]);
+
+  const handleMessageChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setMessage(event.target.value);
+  }
+
+  const handleVariantChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setVariant(event.target.value as ToastVariant);
+  }
+
+  useEffect(() => {
+    console.log(`variant changed to ${variant}`)
+  }, [variant])
+
+  useEffect(() => {
+    console.log(`message set to ${message}`)
+  }, [message])
+
   return (
     <CustomWrapper>
       <CustomHeader>
@@ -114,25 +134,29 @@ function ToastPlayground() {
             Message
           </Label>
           <InputWrapper>
-            <MessageInput id="message" />
+            <MessageInput id="message" value={message} onChange={handleMessageChange}/>
           </InputWrapper>
         </Row>
 
         <Row>
           <Label>Variant</Label>
-          <RadioWrapper>
-            <RadioWrapperLabel htmlFor="variant-notice">
-              <input
-                id="variant-notice"
-                type="radio"
-                name="variant"
-                value="notice"
-              />
-              notice
-            </RadioWrapperLabel>
-          </RadioWrapper>
-
-          {/* TODO Other Variant radio buttons here */}
+          {
+            VARIANT_OPTIONS.map((v) => (
+              <RadioWrapper key={v}>
+                <RadioWrapperLabel htmlFor={`variant-${v}`}>
+                  <input
+                    id={`variant-${v}`}
+                    type="radio"
+                    name="variant"
+                    checked={v === variant}
+                    value={v}
+                    onChange={handleVariantChange}
+                  />
+                  {v}
+                </RadioWrapperLabel>
+              </RadioWrapper>
+            ))
+          }
         </Row>
 
         <Row>
