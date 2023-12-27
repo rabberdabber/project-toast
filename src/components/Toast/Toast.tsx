@@ -90,7 +90,7 @@ const Error = styled(CustomToast)`
   }
 `;
 
-function Toast(props: React.PropsWithChildren & { message: string, variant: ToastVariant }): React.ReactElement {
+function Toast(props: React.PropsWithChildren & { message: string, variant: ToastVariant, setToggleToast: React.Dispatch<React.SetStateAction<boolean>> }): React.ReactElement {
   const toastMap: Record<ToastVariant, React.FC<React.PropsWithChildren>> = {
     notice: Notice,
     warning: Warning,
@@ -99,16 +99,18 @@ function Toast(props: React.PropsWithChildren & { message: string, variant: Toas
   };
 
   const Toast = toastMap[props.variant];
+  const Icon = ICONS_BY_VARIANT[props.variant];
+
   return (
     <Toast>
       <>
         <IconContainer>
-          <Info size={24} />
+          <Icon size={24} />
         </IconContainer>
         <Content>
             {props.message}
         </Content>
-        <CloseButton>
+        <CloseButton onClick={() => props.setToggleToast(false)}>
           <X size={24} />
           <VisuallyHidden>Dismiss message</VisuallyHidden>
         </CloseButton>

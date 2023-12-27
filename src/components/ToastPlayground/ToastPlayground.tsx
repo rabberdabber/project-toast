@@ -100,6 +100,7 @@ const RadioWrapperLabel = styled.label`
 function ToastPlayground(): React.ReactElement {
   const [message, setMessage] = React.useState('');
   const [variant, setVariant] = React.useState<ToastVariant>(VARIANT_OPTIONS[0]);
+  const [toggleToast, setToggleToast] = React.useState<boolean>(false);
 
   const handleMessageChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(event.target.value);
@@ -109,21 +110,13 @@ function ToastPlayground(): React.ReactElement {
     setVariant(event.target.value as ToastVariant);
   }
 
-  useEffect(() => {
-    console.log(`variant changed to ${variant}`)
-  }, [variant])
-
-  useEffect(() => {
-    console.log(`message set to ${message}`)
-  }, [message])
-
   return (
     <CustomWrapper>
       <CustomHeader>
         <CustomImage alt="Cute toast mascot" src={toastImage}/>
         <CustomHeaderH1>Toast Playground</CustomHeaderH1>
       </CustomHeader>
-      <Toast message={message} variant={variant} />
+      {toggleToast && <Toast message={message} variant={variant} setToggleToast={setToggleToast}/>}
       <ControlsWrapper>
         <Row>
           <Label
@@ -161,7 +154,7 @@ function ToastPlayground(): React.ReactElement {
         <Row>
           <Label />
           <RadioWrapper>
-            <Button>Pop Toast!</Button>
+            <Button onClick={() => setToggleToast(true)}>Pop Toast!</Button>
           </RadioWrapper>
         </Row>
       </ControlsWrapper>
