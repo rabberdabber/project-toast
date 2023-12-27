@@ -25,5 +25,12 @@
   "browserslist": "> 0.5%, last 2 versions, not dead",
   "staticFiles": {
     "staticPath": "assets"
+  },
+  "devDependencies": {
+    "@parcel/core": "^2.10.3",
+    "@types/react": "^18.2.45",
+    "@types/react-dom": "^18.2.18",
+    "parcel-bundler": "^1.12.5",
+    "typescript": "^5.3.3"
   }
 }
