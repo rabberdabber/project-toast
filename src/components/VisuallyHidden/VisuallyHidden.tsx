@@ -1,17 +1,31 @@
 import React from 'react';
+import styled from 'styled-components';
 
-import styles from './styles.d.ts';
+const ShowWrapperSpan = styled.span`
+  font-size: 0.5rem;
+`;
+
+const WrapperSpan = styled.span`
+  position: absolute;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  width: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+`;
 
 const VisuallyHidden = ({
   children,
   className = '',
   ...delegated
-}) => {
-  const [forceShow, setForceShow] = React.useState(false);
+}: React.ComponentProps<"div">) => {
+  const [forceShow, setForceShow] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     if (process.env.NODE_ENV !== 'production') {
-      const handleKeyDown = (ev) => {
+      const handleKeyDown = (ev: KeyboardEvent ): void => {
         if (ev.key === 'Alt') {
           setForceShow(true);
         }
@@ -32,13 +46,17 @@ const VisuallyHidden = ({
   }, []);
 
   if (forceShow) {
-    return <span className={styles.showWrapper}>{children}</span>;
+    return (
+      <ShowWrapperSpan>
+        {children}
+      </ShowWrapperSpan>
+    );
   }
 
   return (
-    <span className={`${className} ${styles.wrapper}`} {...delegated}>
+    <WrapperSpan className={className} {...delegated}>
       {children}
-    </span>
+    </WrapperSpan>
   );
 };
 

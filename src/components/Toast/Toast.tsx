@@ -9,8 +9,9 @@ import {
 
 import VisuallyHidden from '../VisuallyHidden';
 
-import styles from './Toast.module.css';
 import styled from 'styled-components';
+import { ToastVariant } from '../../types';
+
 
 const ICONS_BY_VARIANT = {
   notice: Info,
@@ -89,20 +90,30 @@ const Error = styled(CustomToast)`
   }
 `;
 
-function Toast(props: React.PropsWithChildren & {variant: string}): React.ReactElement {
+function Toast(props: React.PropsWithChildren & { message: string, variant: ToastVariant }): React.ReactElement {
+  const toastMap: Record<ToastVariant, React.FC<React.PropsWithChildren>> = {
+    notice: Notice,
+    warning: Warning,
+    success: Success,
+    error: Error,
+  };
+
+  const Toast = toastMap[props.variant];
   return (
-    <Notice>
-      <IconContainer>
-        <Info size={24} />
-      </IconContainer>
-      <Content>
-        16 photos have been uploaded
-      </Content>
-      <CloseButton>
-        <X size={24} />
-        <VisuallyHidden>Dismiss message</VisuallyHidden>
-      </CloseButton>
-    </Notice>
+    <Toast>
+      <>
+        <IconContainer>
+          <Info size={24} />
+        </IconContainer>
+        <Content>
+            {props.message}
+        </Content>
+        <CloseButton>
+          <X size={24} />
+          <VisuallyHidden>Dismiss message</VisuallyHidden>
+        </CloseButton>
+        </>
+    </Toast>
   );
 }
 

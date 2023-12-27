@@ -4,6 +4,8 @@ import Button from '../Button';
 
 import styled from 'styled-components';
 import toastImage from '../../../assets/toast.png';
+import Toast from '../Toast';
+import { ToastVariant, VARIANT_OPTIONS } from '../../types';
 
 
 const CustomWrapper = styled.div`
@@ -95,9 +97,6 @@ const RadioWrapperLabel = styled.label`
 `;
 
 
-const VARIANT_OPTIONS = ['notice', 'warning', 'success', 'error'] as const;
-
-type ToastVariant = typeof VARIANT_OPTIONS[number];
 function ToastPlayground(): React.ReactElement {
   const [message, setMessage] = React.useState('');
   const [variant, setVariant] = React.useState<ToastVariant>(VARIANT_OPTIONS[0]);
@@ -124,7 +123,7 @@ function ToastPlayground(): React.ReactElement {
         <CustomImage alt="Cute toast mascot" src={toastImage}/>
         <CustomHeaderH1>Toast Playground</CustomHeaderH1>
       </CustomHeader>
-
+      <Toast message={message} variant={variant} />
       <ControlsWrapper>
         <Row>
           <Label
