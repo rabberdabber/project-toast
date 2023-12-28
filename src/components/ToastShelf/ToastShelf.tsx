@@ -3,7 +3,7 @@ import React from 'react';
 import Toast from '../Toast';
 import styles from './ToastShelf.module.css';
 import styled, { keyframes } from 'styled-components';
-import { ToastType } from '../../types';
+import { ToastContext } from '../ToastProvider';
 
 
 // Define the keyframes for the toast animation
@@ -32,15 +32,8 @@ const ToastWrapper = styled.div`
 `;
 
 
-function ToastShelf({ toasts, setToasts}: { toasts: ToastType[], setToasts: React.Dispatch<React.SetStateAction<ToastType[]>> }): React.ReactElement {
-
-  const deleteToast = (idx: number) => {
-    setToasts((prevToasts) => {
-      const newToasts = [...prevToasts];
-      newToasts.splice(idx, 1);
-      return newToasts;
-    });
-  }
+function ToastShelf(): React.ReactElement {
+  const { toasts, deleteToast } = React.useContext(ToastContext);
   return (
     <Wrapper>
       {

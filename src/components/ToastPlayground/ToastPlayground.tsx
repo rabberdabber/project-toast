@@ -7,6 +7,7 @@ import toastImage from '../../../assets/toast.png';
 import Toast from '../Toast';
 import ToastShelf from '../ToastShelf';
 import { ToastVariant, ToastType, VARIANT_OPTIONS } from '../../types';
+import { ToastContext } from '../ToastProvider';
 
 
 const CustomWrapper = styled.div`
@@ -99,9 +100,8 @@ const RadioWrapperLabel = styled.label`
 
 
 function ToastPlayground(): React.ReactElement {
-  const [message, setMessage] = React.useState('');
-  const [variant, setVariant] = React.useState<ToastVariant>(VARIANT_OPTIONS[0]);
-  const [toasts, setToasts] = React.useState<ToastType[]>([]);
+  const { message, variant, addToast, setMessage, setVariant } = React.useContext(ToastContext);
+
 
   const handleMessageChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(event.target.value);
@@ -111,20 +111,13 @@ function ToastPlayground(): React.ReactElement {
     setVariant(event.target.value as ToastVariant);
   }
 
-  const addToast = React.useCallback((event: React.FormEvent) => {
-    event.preventDefault();
-    setToasts((prevToasts) => [...prevToasts, { variant, message, id: `${Date.now()}` }]);
-    setVariant(VARIANT_OPTIONS[0]);
-    setMessage('');
-  }, [variant, message])
-
   return (
     <CustomWrapper>
       <CustomHeader>
         <CustomImage alt="Cute toast mascot" src={toastImage}/>
         <CustomHeaderH1>Toast Playground</CustomHeaderH1>
       </CustomHeader>
-      <ToastShelf toasts={toasts} setToasts={setToasts} />
+      <ToastShelf />
       <ControlsWrapper>
         <form onSubmit={addToast}>
           <Row>
