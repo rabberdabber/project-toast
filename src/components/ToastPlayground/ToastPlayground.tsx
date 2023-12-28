@@ -5,7 +5,8 @@ import Button from '../Button';
 import styled from 'styled-components';
 import toastImage from '../../../assets/toast.png';
 import Toast from '../Toast';
-import { ToastVariant, VARIANT_OPTIONS } from '../../types';
+import ToastShelf from '../ToastShelf';
+import { ToastVariant, ToastType, VARIANT_OPTIONS } from '../../types';
 
 
 const CustomWrapper = styled.div`
@@ -100,7 +101,7 @@ const RadioWrapperLabel = styled.label`
 function ToastPlayground(): React.ReactElement {
   const [message, setMessage] = React.useState('');
   const [variant, setVariant] = React.useState<ToastVariant>(VARIANT_OPTIONS[0]);
-  const [toggleToast, setToggleToast] = React.useState<boolean>(false);
+  const [toasts, setToasts] = React.useState<ToastType[]>([]);
 
   const handleMessageChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(event.target.value);
@@ -110,53 +111,62 @@ function ToastPlayground(): React.ReactElement {
     setVariant(event.target.value as ToastVariant);
   }
 
+  const addToast = React.useCallback((event: React.FormEvent) => {
+    event.preventDefault();
+    setToasts((prevToasts) => [...prevToasts, { variant, message, id: `${Date.now()}` }]);
+    setVariant(VARIANT_OPTIONS[0]);
+    setMessage('');
+  }, [variant, message])
+
   return (
     <CustomWrapper>
       <CustomHeader>
         <CustomImage alt="Cute toast mascot" src={toastImage}/>
         <CustomHeaderH1>Toast Playground</CustomHeaderH1>
       </CustomHeader>
-      {toggleToast && <Toast message={message} variant={variant} setToggleToast={setToggleToast}/>}
+      <ToastShelf toasts={toasts} setToasts={setToasts} />
       <ControlsWrapper>
-        <Row>
-          <Label
-            htmlFor="message"
-            style={{ alignSelf: 'baseline' }}
-          >
-            Message
-          </Label>
-          <InputWrapper>
-            <MessageInput id="message" value={message} onChange={handleMessageChange}/>
-          </InputWrapper>
-        </Row>
+        <form onSubmit={addToast}>
+          <Row>
+            <Label
+              htmlFor="message"
+              style={{ alignSelf: 'baseline' }}
+            >
+              Message
+            </Label>
+            <InputWrapper>
+              <MessageInput id="message" value={message} onChange={handleMessageChange}/>
+            </InputWrapper>
+          </Row>
 
-        <Row>
-          <Label>Variant</Label>
-          {
-            VARIANT_OPTIONS.map((v) => (
-              <RadioWrapper key={v}>
-                <RadioWrapperLabel htmlFor={`variant-${v}`}>
-                  <input
-                    id={`variant-${v}`}
-                    type="radio"
-                    name="variant"
-                    checked={v === variant}
-                    value={v}
-                    onChange={handleVariantChange}
-                  />
-                  {v}
-                </RadioWrapperLabel>
-              </RadioWrapper>
-            ))
-          }
-        </Row>
+          <Row>
+            <Label>Variant</Label>
+            {
+              VARIANT_OPTIONS.map((v) => (
+                <RadioWrapper key={v}>
+                  <RadioWrapperLabel htmlFor={`variant-${v}`}>
+                    <input
+                      id={`variant-${v}`}
+                      type="radio"
+                      name="variant"
+                      checked={v === variant}
+                      value={v}
+                      onChange={handleVariantChange}
+                    />
+                    {v}
+                  </RadioWrapperLabel>
+                </RadioWrapper>
+              ))
+            }
+          </Row>
 
-        <Row>
-          <Label />
-          <RadioWrapper>
-            <Button onClick={() => setToggleToast(true)}>Pop Toast!</Button>
-          </RadioWrapper>
-        </Row>
+          <Row>
+            <Label />
+            <RadioWrapper>
+              <Button> Pop Toast!</Button>
+            </RadioWrapper>
+          </Row>
+        </form>
       </ControlsWrapper>
     </CustomWrapper>
   );
